@@ -72,6 +72,8 @@ private:
     // std::vector<double> hw_states_powers_;
     // std::vector<double> hw_states_board_temperatures_;
 
+    std::vector<double> hw_states_target_velocities_;
+
     
 };
 } // moteus_hw_interface

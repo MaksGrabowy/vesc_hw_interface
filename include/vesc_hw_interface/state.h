@@ -21,6 +21,8 @@ struct VescState{
     // double temp_motor;
     double in_current;
 
+    double target_velocity;
+
 };
 
 

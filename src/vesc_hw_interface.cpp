@@ -30,6 +30,8 @@ hardware_interface::CallbackReturn VescHwInterface::on_init(const hardware_inter
     // hw_states_powers_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
     // hw_states_board_temperatures_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
+    hw_states_target_velocities_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+
     // commands
     // hw_commands_positions_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
     hw_commands_velocities_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
@@ -105,6 +107,7 @@ std::vector<hardware_interface::StateInterface> VescHwInterface::export_state_in
     state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "duty", &hw_states_duties_[i]));
     state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "temp_fet", &hw_states_temp_fets_[i]));
     state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "current_in", &hw_states_in_currents_[i]));
+    state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "target_velocity", &hw_states_target_velocities_[i]));
   }
   return state_interfaces;
 }
@@ -133,6 +136,8 @@ hardware_interface::return_type VescHwInterface::read(const rclcpp::Time &, cons
     hw_states_temp_fets_[i] = (double)read_state[i].temp_fet;
     hw_states_in_currents_[i] = (double)read_state[i].in_current;
     // hw_states_voltages_[i] = (double)read_state[i].voltage;
+
+    hw_states_target_velocities_[i] = (double)read_state[i].target_velocity;
   }
 
   return return_type::OK;

@@ -103,6 +103,7 @@ void vesc::write_velocity(std::vector<double> velocities){
         memcpy(frame.data, &rpm_net, 4);
 
         drivers_frames[i] = frame;
+        states_[i].target_velocity = velocities[i]*10;
     }
     std::lock_guard<std::mutex> lock(current_frame_mutex);
     current_frames = drivers_frames;
@@ -123,6 +124,7 @@ void vesc::write_stop(){
 	        frame.data[i] = 0; //add padding to make the frame CAN FD compliant
 
         drivers_frames[i] = frame;
+        states_[i].target_velocity = 0;
     }
     std::lock_guard<std::mutex> lock(current_frame_mutex);
     current_frames = drivers_frames;
