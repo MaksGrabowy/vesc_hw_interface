@@ -4,17 +4,24 @@
 #include <string>
 
 
-struct VescState
-{
-    // u_int8_t mode;
+struct VescState{
     double position;
     double velocity;
-    // double torque;
-    // double power;
-    // double voltage;
-    // double board_temperature;
-    // u_int16_t fault;
+
+    double duty;
+    double current;
+
+    // double amp_hours;
+    // double amp_hours_chg;
+
+    // double watt_hours;
+    // double watt_hours_chg;
+
+    double temp_fet;
+    // double temp_motor;
+    double in_current;
+
 };
 
 
-#endif // DIFFDRIVE_ARDUINO_CONFIG_H
+#endif 

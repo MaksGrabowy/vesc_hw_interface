@@ -20,7 +20,10 @@ hardware_interface::CallbackReturn VescHwInterface::on_init(const hardware_inter
     hw_states_velocities_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
 
     // uncommon states
-    // hw_states_modes_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+    hw_states_currents_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+    hw_states_duties_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+    hw_states_temp_fets_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+    hw_states_in_currents_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
     // hw_states_faults_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
     // hw_states_torques_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
     // hw_states_voltages_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
@@ -98,12 +101,10 @@ std::vector<hardware_interface::StateInterface> VescHwInterface::export_state_in
     state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, hardware_interface::HW_IF_POSITION, &hw_states_positions_[i]));
 
     // uncommon states
-    // state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "mode", &hw_states_modes_[i]));
-    // state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "fault", &hw_states_faults_[i]));
-    // state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "torque", &hw_states_torques_[i]));
-    // state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "voltage", &hw_states_voltages_[i]));
-    // state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "power", &hw_states_powers_[i]));
-    // state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "board_temperature", &hw_states_board_temperatures_[i]));
+    state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "current", &hw_states_currents_[i]));
+    state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "duty", &hw_states_duties_[i]));
+    state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "temp_fet", &hw_states_temp_fets_[i]));
+    state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "current_in", &hw_states_in_currents_[i]));
   }
   return state_interfaces;
 }
@@ -127,13 +128,11 @@ hardware_interface::return_type VescHwInterface::read(const rclcpp::Time &, cons
     hw_states_positions_[i] = (double)read_state[i].position;
 
     // uncommon states
-    // hw_states_modes_[i] = (double)read_state[i].mode;
-    // hw_states_faults_[i] = (double)read_state[i].fault;
-    // hw_states_torques_[i] = (double)read_state[i].torque;
+    hw_states_currents_[i] = (double)read_state[i].current;
+    hw_states_duties_[i] = (double)read_state[i].duty;
+    hw_states_temp_fets_[i] = (double)read_state[i].temp_fet;
+    hw_states_in_currents_[i] = (double)read_state[i].in_current;
     // hw_states_voltages_[i] = (double)read_state[i].voltage;
-    // hw_states_powers_[i] = (double)read_state[i].power;
-    // hw_states_board_temperatures_[i] = (double)read_state[i].board_temperature;
-    // RCLCPP_INFO(rclcpp::get_logger("MoteusHW"), "id: %d, volts: %f",i,read_state[i].voltage);
   }
 
   return return_type::OK;

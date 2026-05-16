@@ -65,10 +65,10 @@ private:
     std::vector<double> hw_commands_velocities_;
     // std::vector<double> hw_commands_flux_brakes_;
 
-    // std::vector<double> hw_states_modes_;
-    // std::vector<double> hw_states_faults_;
-    // std::vector<double> hw_states_torques_;
-    // std::vector<double> hw_states_voltages_;
+    std::vector<double> hw_states_currents_;
+    std::vector<double> hw_states_duties_;
+    std::vector<double> hw_states_temp_fets_;
+    std::vector<double> hw_states_in_currents_;
     // std::vector<double> hw_states_powers_;
     // std::vector<double> hw_states_board_temperatures_;
 

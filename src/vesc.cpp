@@ -178,24 +178,20 @@ void vesc::interpret_frame(const struct can_frame& frame){
     if(driver_index != -1 && packet_id == 9){
         std::lock_guard<std::mutex> lock(current_state_mutex);
         states_[driver_index].velocity = get_int32(frame.data)*0.105f; //conversion from RPM to rad/s
+        states_[driver_index].current = get_int16(frame.data+4)*0.1f;
+        states_[driver_index].duty = get_int16(frame.data+6)/1000.0f; 
+
     }
     if(driver_index != -1 && packet_id == 16){
         std::lock_guard<std::mutex> lock(current_state_mutex);
+        states_[driver_index].temp_fet = get_int16(frame.data)*0.1f;
+        // states_[driver_index].temp_fet = get_int16(frame.data+2)*0.1f;
+        states_[driver_index].in_current = get_int16(frame.data+4)*0.1f;
         states_[driver_index].position = ((get_int16(frame.data + 6) / 50.0f)/360.0f)*6.2830; //conversion from degrees to radian
     }
 }
 std::vector<VescState> vesc::get_state(){
     std::lock_guard<std::mutex> lock(current_state_mutex);
-    // MoteusState current_state;
-    // current_state.mode = this->mode;
-    // current_state.position = this->position;
-    // current_state.velocity = this->velocity;
-    // current_state.torque = this->torque;
-    // current_state.power = this->power;
-    // current_state.voltage = this->voltage;
-    // current_state.board_temperature = this->temperature;
-    // current_state.fault = this->fault;
-    // std::vector<MoteusState> current_states = states_;
     return states_;
 }
 
