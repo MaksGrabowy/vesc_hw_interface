@@ -1,0 +1,9 @@
+<library path="vesc_hw_interface">
+  <class name="vesc_hw_interface/VescHwInterface"
+         type="vesc_hw_interface::VescHwInterface"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Vesc system plugin for ros2_control.
+    </description>
+  </class>
+</library>
